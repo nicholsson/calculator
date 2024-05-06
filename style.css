@@ -1,0 +1,37 @@
+*{
+    border-style: solid;
+}
+#container {
+    height: 500px;
+    width: 450px;
+}
+#container, #display, #special-operators, #numbers, #buttons-container, #operators {
+    display: flex;
+    
+}
+#numbers, #container, #operators {
+    flex-direction: column;
+}
+button {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+#buttons-container {
+    height: 90%;
+}
+#numbers {
+    height: 100%;
+    width: 70%;
+}
+#operators {
+    height: 100%;
+    width: 30%;
+}
+#display {
+    height: 10%;
+}
+#first-row, #second-row, #third-row, #fourth-row, #special-operators {
+    height: 20%;
+    width: auto;
+}
