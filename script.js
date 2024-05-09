@@ -19,6 +19,9 @@ operators.forEach(operator => {
         operate(operator.textContent);
     })
 })
+resetButton.addEventListener("click", () => {
+    resetCalculator();
+})
 function displayNumber(num) {
     if (currentNumber.length < 9) {
         currentNumber += num;
@@ -72,4 +75,11 @@ function divide(previousNumber, currentNumber) {
 function multiply(previousNumber, currentNumber) {
 
     return parseFloat(previousNumber) * parseFloat(currentNumber)
+}
+function resetCalculator() {
+    currentNumber = "";
+    previousNumber = "";
+    operatorSign = "";
+    displayCurrentNumber.textContent = "";
+    displayPreviousNumber.textContent = "";
 }
