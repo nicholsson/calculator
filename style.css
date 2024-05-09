@@ -1,53 +1,73 @@
-*{
-    border-style: solid;
-    border-width: 1px;
+* {
+    font-family: sans-serif, monospace;
+}
+body {
+    height: 100vh;
+    width: 100vw;
 }
 h1 {
     text-align: center;
 }
 #container {
+    height: 50%;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
-    height: 600px;
-    width: 400px;
-    border-radius: 5%;
-    margin: auto;
+    box-sizing: border-box;
+    border-style: solid;
+    border-radius: 2%;
+    border-color: #9AC8CD;
+    background-color: #E1F7F5;
+    box-shadow: 1px 1px 1px 1px #1679AB;
 }
 #display {
-    height: 25%;
-    border-radius: 5% 5% 0% 0%;
+    height: 20%;
+    width: auto;
 }
-.result {
-    height: 60%;
-    border-radius: 5% 5% 0% 0%;
-    text-align: end;
+
+.previous-number, .current-number {
+    height: 50%;
+    width: auto;
     box-sizing: border-box;
-    padding-top: 12%;
-    padding-right: 5px;
+    text-align: right;
+    padding-right: 4%;
+    padding-top: 2%;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
-.operand {
-    height: 40%;
-    text-align: end;
-    box-sizing: border-box;
-    padding-top: 7%;
-    padding-right: 5px;
+.current-number {
+    font-size: xx-large
 }
-#buttons-container {
+.row {
     display: flex;
-    flex-wrap: wrap;
-    height: 75%;
-    border-radius: 0% 0% 5% 5%;
-    align-content: space-around;
-    justify-content: space-around;
+    height: 16%;
+    justify-content: space-between;
 }
 button {
-    width: 90px;
-    height: 15%;
+    height: 98%;
+    width: 24%;
     border-radius: 5%;
-    box-sizing: border-box;
-    
-    
+    margin: 1px;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: x-large;
+}
+button:hover {
+    opacity: 0.7;    
 }
 #zero {
-    width: 191px;
+    width: 49.2%;
+}
+.special-button {
+    background-color: #4793AF;
+}
+.operator {
+    background-color: #DD5746;
+}
+.number {
+    background-color: #FFC470;
 }
