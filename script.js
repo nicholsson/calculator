@@ -42,15 +42,35 @@ function displayNumber(num) {
     }
 }
 function operate(sign) {
-    if (calculator.operatorSign == "") {
-        calculator.operatorSign = sign;
-        calculator.previousNumber = calculator.currentNumber;
-        calculator.currentNumber = "";
-        displayPreviousNumber.textContent = calculator.previousNumber;
+    // Logic 
+    // step1) when inserted the sign, save number1 in previousNumber - save sign in operationSign - free storage in currentNumber
+    // step2) insert number2 and save it in currentNumber - if sign is pressed, compute calculation and save result in previousNumber and make space in currentNumber
+    // step3) make space in operationSign and wait for next number
+    // number1 + save number1 in previousNumber + sign - save sign in operatorSign - + number2
+    // save number2 in currentNumber + sign (or equal) - compute the operation and save result in previousNumber 
+    if (calculator.operatorSign != "=" && haveCalculated == false) {
+    // step1
+        if (calculator.previousNumber == "") {
+            calculator.operatorSign = sign;
+            calculator.previousNumber = calculator.currentNumber;
+            calculator.currentNumber = "";
+            displayPreviousNumber.textContent = calculator.previousNumber;
+        } else {
+            calculate(calculator.previousNumber, calculator.currentNumber, calculator.operatorSign);
+            displayCurrentNumber.textContent = calculator.currentNumber;
+            displayPreviousNumber.textContent = calculator.previousNumber;
+            haveCalculated = true;
+            calculator.operatorSign = sign;
+        }
     } else {
+    // step2
         calculate(calculator.previousNumber, calculator.currentNumber, calculator.operatorSign);
+        // displays the result
         displayCurrentNumber.textContent = calculator.currentNumber;
+        // display the last number inserted
         displayPreviousNumber.textContent = calculator.previousNumber;
+        calculator.operatorSign = "";
+        haveCalculated = false;
     }
 }
 
