@@ -6,9 +6,9 @@ const resetButton = document.querySelector("#ac");
 const cancelButton = document.querySelector("#c");
 const percentageButton = document.querySelector(".percentage-button");
 
-let previousNumber = "";
-let currentNumber = "";
-let operatorSign = "";
+let haveCalculated = false;
+let calculator = {previousNumber: "", currentNumber: "", operatorSign: ""};
+
 numbers.forEach(number => {
     number.addEventListener("click", () => {
         displayNumber(number.textContent);
@@ -29,29 +29,32 @@ percentageButton.addEventListener("click", () => {
     calculatePercentage();
 })
 function displayNumber(num) {
-    // behaviour in case user presses the decimal button multiple times:
-    if (num =='.' && currentNumber.includes('.')) {
+    // prevent adding . if nnumber is already a decimal:
+    if (num =='.' && calculator.currentNumber.includes('.')) {
         return;
     }
-    if (currentNumber.length < 9) {
-        currentNumber += num;
-        displayCurrentNumber.textContent = currentNumber;
-        displayPreviousNumber.textContent = previousNumber;
+    if (calculator.currentNumber.length < 9) {
+        calculator.currentNumber += num;
+        displayCurrentNumber.textContent = calculator.currentNumber;
+        displayPreviousNumber.textContent = calculator.previousNumber;
     } else {
         alert('too many digits!');
     }
 }
 function operate(sign) {
-    if (operatorSign != "=" && operatorSign == "") {
-        operatorSign = sign;
-        previousNumber = currentNumber;
-        currentNumber = "";
+    if (calculator.operatorSign == "") {
+        calculator.operatorSign = sign;
+        calculator.previousNumber = calculator.currentNumber;
+        calculator.currentNumber = "";
+        displayPreviousNumber.textContent = calculator.previousNumber;
     } else {
-        displayCurrentNumber.textContent = calculate();
-        operatorSign = "";
+        calculate(calculator.previousNumber, calculator.currentNumber, calculator.operatorSign);
+        displayCurrentNumber.textContent = calculator.currentNumber;
+        displayPreviousNumber.textContent = calculator.previousNumber;
     }
 }
-function calculate() {
+
+function calculate(previousNumber, currentNumber, operatorSign) {
     let result = 0;
     switch (operatorSign) {
         case "+":
@@ -67,7 +70,8 @@ function calculate() {
             result = multiply(previousNumber, currentNumber);
             break;
     }
-    currentNumber = result;
+    calculator.previousNumber = calculator.currentNumber;
+    calculator.currentNumber = result.toString();
     return result;
 }
 function sum(previousNumber, currentNumber) {
@@ -87,19 +91,21 @@ function multiply(previousNumber, currentNumber) {
     return parseFloat(previousNumber) * parseFloat(currentNumber);
 }
 function resetCalculator() {
-    currentNumber = "";
-    previousNumber = "";
-    operatorSign = "";
+    calculator.currentNumber = "";
+    calculator.previousNumber = "";
+    calculator.operatorSign = "";
     displayCurrentNumber.textContent = "";
     displayPreviousNumber.textContent = "";
 }
 function cancelDigit() {
-    currentNumber = currentNumber.slice(0, currentNumber.length - 1);
-    displayCurrentNumber.textContent = currentNumber;
-    return currentNumber;
+    calculator.currentNumber = calculator.currentNumber.slice(0, calculator.currentNumber.length - 1);
+    displayCurrentNumber.textContent = calculator.currentNumber.toString();
+    return calculator.currentNumber;
 }
 function calculatePercentage() {
-    currentNumber = (parseFloat(currentNumber / 100));
-    displayCurrentNumber.textContent = currentNumber;
+    num = parseFloat(calculator.currentNumber);
+    result = num * 0.01;
+    calculator.currentNumber = result.toString();
+    displayCurrentNumber.textContent = calculator.currentNumber;
 
 }
