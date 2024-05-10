@@ -22,13 +22,23 @@ operators.forEach(operator => {
 resetButton.addEventListener("click", () => {
     resetCalculator();
 })
+cancelButton.addEventListener("click", () =>{
+    cancelDigit();
+})
+percentageButton.addEventListener("click", () => {
+    calculatePercentage();
+})
 function displayNumber(num) {
+    // behaviour in case user presses the decimal button multiple times:
+    if (num =='.' && currentNumber.includes('.')) {
+        return;
+    }
     if (currentNumber.length < 9) {
         currentNumber += num;
         displayCurrentNumber.textContent = currentNumber;
         displayPreviousNumber.textContent = previousNumber;
     } else {
-        alert('number is too big');
+        alert('too many digits!');
     }
 }
 function operate(sign) {
@@ -58,7 +68,7 @@ function calculate() {
             break;
     }
     currentNumber = result;
-    return result
+    return result;
 }
 function sum(previousNumber, currentNumber) {
 
@@ -70,11 +80,11 @@ function subtract(previousNumber, currentNumber) {
 }
 function divide(previousNumber, currentNumber) {
 
-    return parseFloat(previousNumber) / parseFloat(currentNumber)
+    return parseFloat(previousNumber) / parseFloat(currentNumber);
 }
 function multiply(previousNumber, currentNumber) {
 
-    return parseFloat(previousNumber) * parseFloat(currentNumber)
+    return parseFloat(previousNumber) * parseFloat(currentNumber);
 }
 function resetCalculator() {
     currentNumber = "";
@@ -82,4 +92,14 @@ function resetCalculator() {
     operatorSign = "";
     displayCurrentNumber.textContent = "";
     displayPreviousNumber.textContent = "";
+}
+function cancelDigit() {
+    currentNumber = currentNumber.slice(0, currentNumber.length - 1);
+    displayCurrentNumber.textContent = currentNumber;
+    return currentNumber;
+}
+function calculatePercentage() {
+    currentNumber = (parseFloat(currentNumber / 100));
+    displayCurrentNumber.textContent = currentNumber;
+
 }
