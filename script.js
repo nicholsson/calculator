@@ -38,16 +38,26 @@ function displayNumber(num) {
 
 }
 function operate(sign) { 
-    if('operationResult' in calculator && calculator.currentNumber in calculator) {
+    if ('operationResult' in calculator && 'currentNumber' in calculator) {
         calculate(calculator.operationResult, calculator.currentNumber, calculator.operatorSign);
-    } else if (!(('operationResult' && calculator.previousNumber) in calculator)) {
+    } else if (!('operationResult' in calculator) && !('previousNumber' in calculator)) {
 // this means that no calculation has yet been done, and that i am waiting for a second number (current number)
 // so i just assign the operatorSign to calculator and the number displayed before pressing the sign to previousNumber
         calculator.operatorSign = sign;
         calculator.previousNumber = displayCurrentNumber.textContent;
         displayPreviousNumber.textContent = calculator.previousNumber;
         displayCurrentNumber.textContent = "";
+    } else if (!('operationResult' in calculator) && 'previousNumber' in calculator) {
+// this means that i have to take the value displayed and operate the calculation
+        calculator.currentNumber =  displayCurrentNumber.textContent;
+
+        calculate(calculator.previousNumber, calculator.currentNumber, calculator.operatorSign);
+    } else if ('operationResult' in calculator && !('currentNumber' in calculator)) {
+        displayCurrentNumber.textContent = "";
+        calculator.operatorSign = sign;
+        calculate(calculator.operationResult, calculator.currentNumber, calculator.operatorSign);
     }
+
 }
 
 function calculate(previousNumber, currentNumber, operatorSign) {
@@ -69,7 +79,7 @@ function calculate(previousNumber, currentNumber, operatorSign) {
     calculator.previousNumber = calculator.currentNumber;
     calculator.operationResult = result;
 //update the display
-    displayPreviousNumber.textContent = previousNumber;
+    displayPreviousNumber.textContent = calculator.previousNumber;
     displayCurrentNumber.textContent = calculator.operationResult;
     delete calculator.currentNumber;
     delete calculator.previousNumber;
