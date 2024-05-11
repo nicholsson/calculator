@@ -10,11 +10,12 @@ let calculator = {};
 
 numbers.forEach(number => {
     number.addEventListener("click", () => {
-        buildCalculator(number.textContent);
+        displayNumber(number.textContent);
     })
 });
 operators.forEach(operator => {
     operator.addEventListener("click", () => {
+        buildCalculator();
         operate(operator.textContent);
     })
 })
@@ -27,7 +28,7 @@ cancelButton.addEventListener("click", () =>{
 percentageButton.addEventListener("click", () => {
     calculatePercentage();
 })
-function buildCalculator(num) {
+function displayNumber(num) {
     // prevent adding . if nnumber is already a decimal:
     if (num == '.' && displayCurrentNumber.textContent.includes('.')){
         return;
@@ -37,70 +38,92 @@ function buildCalculator(num) {
     }
 
 }
+function buildCalculator() {
+    if (!('operatorSign' in calculator)) {
+        calculator.num1 = getContent();
+        return true;
+    } else {
+        if (!('num2' in calculator)) {
+            calculator.num2 = getContent();
+            return false;
+        }
+    }
+}
 function operate(sign) { 
-    
+    if (buildCalculator()) {
+        calculator.operatorSign = sign;
+        displayPreviousNumber.textContent = calculator.num1;
+        displayCurrentNumber.textContent = "";
+    } else { // se è falso, ovvero se c'è il num2, fai il calcolo
+        if ('operationResult' in calculator) {
+            calculator.operatorSign = sign;
+            calculate(calculator.operationResult, calculator.num2, calculator.operatorSign);
+        } else {
+            calculate(calculator.num1, calculator.num2, calculator.operatorSign);
+        }
+    }
 
 }
 
-function calculate(previousNumber, currentNumber, operatorSign) {
+function calculate(n1, n2, operatorSign) {
     let result = 0;
     switch (operatorSign) {
         case "+":
-            result = sum(previousNumber, currentNumber);
+            result = sum(n1, n2);
             break;
         case "-":
-            result = subtract(previousNumber, currentNumber);
+            result = subtract(n1, n2);
             break;
         case "/":
-            result = divide(previousNumber, currentNumber);
+            result = divide(n1, n2);
             break;
         case "X":
-            result = multiply(previousNumber, currentNumber);
+            result = multiply(n1, n2);
             break;
     }
-    calculator.previousNumber = calculator.currentNumber;
+    calculator.num1 = calculator.num2;
     calculator.operationResult = result;
 //update the display
-    displayPreviousNumber.textContent = calculator.previousNumber;
+    displayPreviousNumber.textContent = calculator.num1;
     displayCurrentNumber.textContent = calculator.operationResult;
-    delete calculator.currentNumber;
-    delete calculator.previousNumber;
+    delete calculator.num2;
+    delete calculator.num1;
     delete calculator.operatorSign;
     return result;
 }
-function sum(previousNumber, currentNumber) {
+function sum(n1, n2) {
 
-    return parseFloat(previousNumber) + parseFloat(currentNumber)
+    return parseFloat(n1) + parseFloat(n2)
 }
-function subtract(previousNumber, currentNumber) {
+function subtract(n1, n2) {
 
-    return parseFloat(previousNumber) - parseFloat(currentNumber)
+    return parseFloat(n1) - parseFloat(n2)
 }
-function divide(previousNumber, currentNumber) {
+function divide(n1, n2) {
 
-    return parseFloat(previousNumber) / parseFloat(currentNumber);
+    return parseFloat(n1) / parseFloat(n2);
 }
-function multiply(previousNumber, currentNumber) {
+function multiply(n1, n2) {
 
-    return parseFloat(previousNumber) * parseFloat(currentNumber);
+    return parseFloat(n1) * parseFloat(n2);
 }
 function resetCalculator() {
-    calculator.currentNumber = "";
-    calculator.previousNumber = "";
+    calculator.num2 = "";
+    calculator.num1 = "";
     calculator.operatorSign = "";
     displayCurrentNumber.textContent = "";
     displayPreviousNumber.textContent = "";
 }
 function cancelDigit() {
-    calculator.currentNumber = calculator.currentNumber.slice(0, calculator.currentNumber.length - 1);
-    displayCurrentNumber.textContent = calculator.currentNumber.toString();
-    return calculator.currentNumber;
+    calculator.n2 = calculator.n2.slice(0, calculator.n2.length - 1);
+    displayCurrentNumber.textContent = calculator.n2.toString();
+    return calculator.n2;
 }
 function calculatePercentage() {
-    num = parseFloat(calculator.currentNumber);
+    num = parseFloat(calculator.n2);
     result = num * 0.01;
-    calculator.currentNumber = result.toString();
-    displayCurrentNumber.textContent = calculator.currentNumber;
+    calculator.n2 = result.toString();
+    displayCurrentNumber.textContent = calculator.n2;
 
 }
 function getContent() {
