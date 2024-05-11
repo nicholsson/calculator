@@ -6,8 +6,7 @@ const resetButton = document.querySelector("#ac");
 const cancelButton = document.querySelector("#c");
 const percentageButton = document.querySelector(".percentage-button");
 
-let haveCalculated = false;
-let calculator = {previousNumber: "", currentNumber: "", operatorSign: ""};
+let calculator = {};
 
 numbers.forEach(number => {
     number.addEventListener("click", () => {
@@ -30,47 +29,24 @@ percentageButton.addEventListener("click", () => {
 })
 function displayNumber(num) {
     // prevent adding . if nnumber is already a decimal:
-    if (num =='.' && calculator.currentNumber.includes('.')) {
+    if (num == '.' && displayCurrentNumber.textContent.includes('.')){
         return;
     }
-    if (calculator.currentNumber.length < 9) {
-        calculator.currentNumber += num;
-        displayCurrentNumber.textContent = calculator.currentNumber;
-        displayPreviousNumber.textContent = calculator.previousNumber;
-    } else {
-        alert('too many digits!');
+    if (displayCurrentNumber.textContent.length < 9){
+        displayCurrentNumber.textContent += num;
     }
+
 }
-function operate(sign) {
-    // Logic 
-    // step1) when inserted the sign, save number1 in previousNumber - save sign in operationSign - free storage in currentNumber
-    // step2) insert number2 and save it in currentNumber - if sign is pressed, compute calculation and save result in previousNumber and make space in currentNumber
-    // step3) make space in operationSign and wait for next number
-    // number1 + save number1 in previousNumber + sign - save sign in operatorSign - + number2
-    // save number2 in currentNumber + sign (or equal) - compute the operation and save result in previousNumber 
-    if (calculator.operatorSign != "=" && haveCalculated == false) {
-    // step1
-        if (calculator.previousNumber == "") {
-            calculator.operatorSign = sign;
-            calculator.previousNumber = calculator.currentNumber;
-            calculator.currentNumber = "";
-            displayPreviousNumber.textContent = calculator.previousNumber;
-        } else {
-            calculate(calculator.previousNumber, calculator.currentNumber, calculator.operatorSign);
-            displayCurrentNumber.textContent = calculator.currentNumber;
-            displayPreviousNumber.textContent = calculator.previousNumber;
-            haveCalculated = true;
-            calculator.operatorSign = sign;
-        }
-    } else {
-    // step2
-        calculate(calculator.previousNumber, calculator.currentNumber, calculator.operatorSign);
-        // displays the result
-        displayCurrentNumber.textContent = calculator.currentNumber;
-        // display the last number inserted
+function operate(sign) { 
+    if('operationResult' in calculator && calculator.currentNumber in calculator) {
+        calculate(calculator.operationResult, calculator.currentNumber, calculator.operatorSign);
+    } else if (!(('operationResult' && calculator.previousNumber) in calculator)) {
+// this means that no calculation has yet been done, and that i am waiting for a second number (current number)
+// so i just assign the operatorSign to calculator and the number displayed before pressing the sign to previousNumber
+        calculator.operatorSign = sign;
+        calculator.previousNumber = displayCurrentNumber.textContent;
         displayPreviousNumber.textContent = calculator.previousNumber;
-        calculator.operatorSign = "";
-        haveCalculated = false;
+        displayCurrentNumber.textContent = "";
     }
 }
 
@@ -91,7 +67,13 @@ function calculate(previousNumber, currentNumber, operatorSign) {
             break;
     }
     calculator.previousNumber = calculator.currentNumber;
-    calculator.currentNumber = result.toString();
+    calculator.operationResult = result;
+//update the display
+    displayPreviousNumber.textContent = previousNumber;
+    displayCurrentNumber.textContent = calculator.operationResult;
+    delete calculator.currentNumber;
+    delete calculator.previousNumber;
+    delete calculator.operatorSign;
     return result;
 }
 function sum(previousNumber, currentNumber) {
@@ -128,4 +110,7 @@ function calculatePercentage() {
     calculator.currentNumber = result.toString();
     displayCurrentNumber.textContent = calculator.currentNumber;
 
+}
+function getContent() {
+    return displayCurrentNumber.textContent;
 }
