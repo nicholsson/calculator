@@ -7,25 +7,34 @@ const cancelButton = document.querySelector("#c");
 const percentageButton = document.querySelector(".percentage-button");
 
 
-/** the calculator is built with four properties:
+/*
+* the calculator is built with four properties:
  * 
  * 1) num1 -> first number
  * 2) num2 -> second number
  * 3) opSign -> operator
- * 4) result
+ * 4) result -> result of a calculation
  * 
  * These properties are added according to the following logic:
- * 
- * CASE 1 -> the program is just started and the number being displayed will be saved as 
- * num1 as soon as an operator is clicked; the operator is also created in the calculator
- * 
- * CASE 2 -> with num1 && sign in calculator, when another operator is clicked (if a number is displayed), the displayed
- * number is saved as num2 and the calculation begins [calculate(calculator.num1, calculator.num2, calculator.sign)]
- * At this point, in CASE 2 we then have to store the result of the operation in num1, display it on screen, 
- * delete num2 and overwrite the new sign previously clicked;
  *
- * CASE 3 -> in this case we have num1 (which is the result of the previous operation), the overwritten sign and we need to write a new number num2;
- * The situation of CASE 3 is 
+ * CASE 1 -> When inserting numbers, if !opSign in calculator, then create num1 with the pressed number as first value and add the subsequent numbers to num1.
+ * in this case when adding numbers it is necessary to check if the length of the number is within the chosen limit (8 digits in my case)
+ * 
+ * CASE 2 -> When inserting numbers, if opSign in calculator (meaning that num1 is created and stored in calculator), then create num2 with the same logic
+ * as num1. 
+ * 
+ * CASE 3 -> When started, there will be no operator assigned, therefore when the operator buttons is clicked the opSign will be created in calculator
+ * with the corresponding operator (this is done in the buildCalculator function). This case will trigger case 2 if number buttons are pressed,
+ * building the calculator object.
+ * 
+ * CASE 4 -> When opSign is already assigned and an operator button is pressed, this means that (ideally) num1 and num2 are present in calculator,
+ * therefore it must calculate(num1, num2, opSign) accordingly -> once the calculation is done, the result is assigned to calculator.result, and num1 and num2
+ * will be delated to trigger CASE 2.
+ * 
+ * CASE 5 (VARIATION of CASE 4) -> It may happen that if we repeat CASE 4, but opSign, calculator.result (instead of num1) and num2 are present in calculator,
+ * then it must calculate(calculator.result, num2, opSign) -> once the calculation is done, the result is updated, num1 and num2 are deleted,
+ * and opSign will be updated with the last pressed button that triggered the calculation.
+ * 
  */
 let calculator = {};
 
@@ -49,6 +58,7 @@ percentageButton.addEventListener("click", () => {
     calculatePercentage();
 })
 function displayNumber(num) {
+// this will follow CASE 1 logic.
     if (!('opSign' in calculator) && !('num1' in calculator)) {
         calculator.num1 = num;
         displayCurrentNumber.textContent += calculator.num1;
@@ -60,6 +70,7 @@ function displayNumber(num) {
             displayCurrentNumber.textContent = calculator.num1;
         }
     }
+// this will follow CASE 2 logic.
     if (('opSign' in calculator) && !('num2' in calculator)) {
         calculator.num2 = num;
         if ('result' in calculator) {
