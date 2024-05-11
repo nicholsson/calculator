@@ -15,8 +15,7 @@ numbers.forEach(number => {
 });
 operators.forEach(operator => {
     operator.addEventListener("click", () => {
-        buildCalculator();
-        operate(operator.textContent);
+        buildCalculator(operator.textContent);
     })
 })
 resetButton.addEventListener("click", () => {
@@ -30,40 +29,33 @@ percentageButton.addEventListener("click", () => {
 })
 function displayNumber(num) {
     // prevent adding . if nnumber is already a decimal:
+    if (('operationResult' in calculator) || ('operatorSign' in calculator)) {
+        displayPreviousNumber.textContent = displayCurrentNumber.textContent;
+        displayCurrentNumber.textContent = "";
+    }
     if (num == '.' && displayCurrentNumber.textContent.includes('.')){
         return;
     }
     if (displayCurrentNumber.textContent.length < 9){
         displayCurrentNumber.textContent += num;
     }
+    
 
 }
-function buildCalculator() {
-    if (!('operatorSign' in calculator)) {
-        calculator.num1 = getContent();
-        return true;
-    } else {
-        if (!('num2' in calculator)) {
-            calculator.num2 = getContent();
-            return false;
-        }
-    }
-}
-function operate(sign) { 
-    if (buildCalculator()) {
+function buildCalculator(sign) {
+    if (!('num1' in calculator)) {
         calculator.operatorSign = sign;
+        calculator.num1 = getContent();
         displayPreviousNumber.textContent = calculator.num1;
-        displayCurrentNumber.textContent = "";
-    } else { // se è falso, ovvero se c'è il num2, fai il calcolo
-        if ('operationResult' in calculator) {
-            calculator.operatorSign = sign;
-            calculate(calculator.operationResult, calculator.num2, calculator.operatorSign);
-        } else {
-            calculate(calculator.num1, calculator.num2, calculator.operatorSign);
-        }
+    } else if (!('num2' in calculator)) {
+        calculator.num2 = getContent();
+        calculate(calculator.num1, calculator.num2, calculator.operatorSign);
     }
-
+    
 }
+//function operate() {
+
+//}
 
 function calculate(n1, n2, operatorSign) {
     let result = 0;
@@ -84,7 +76,6 @@ function calculate(n1, n2, operatorSign) {
     calculator.num1 = calculator.num2;
     calculator.operationResult = result;
 //update the display
-    displayPreviousNumber.textContent = calculator.num1;
     displayCurrentNumber.textContent = calculator.operationResult;
     delete calculator.num2;
     delete calculator.num1;
