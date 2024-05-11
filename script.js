@@ -62,8 +62,14 @@ function displayNumber(num) {
     }
     if (('opSign' in calculator) && !('num2' in calculator)) {
         calculator.num2 = num;
-        displayPreviousNumber.textContent = calculator.num1;
-        displayCurrentNumber.textContent = calculator.num2;
+        if ('result' in calculator) {
+            displayPreviousNumber.textContent = calculator.result + calculator.opSign;
+            displayCurrentNumber.textContent = calculator.num2;
+        } else {
+            displayPreviousNumber.textContent = calculator.num1 + calculator.opSign;
+            displayCurrentNumber.textContent = calculator.num2;
+        }
+        
     } else if (('num2' in calculator) && calculator.num2.length < 9) {
         if (num == '.' && calculator.num2.includes('.')) {
             return;
