@@ -4,13 +4,16 @@
 body {
     height: 100vh;
     width: 100vw;
-    background-color: #FFF7FC;
+    background: linear-gradient(160deg, #FEFDED, #FFCBCB, #FA7070);
 }
 h1 {
     text-align: center;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 #container {
-    height: 50%;
+    height: 80%;
     width: 30%;
     margin-left: auto;
     margin-right: auto;
@@ -18,29 +21,30 @@ h1 {
     flex-direction: column;
     box-sizing: border-box;
     border-style: solid;
-    border-radius: 2%;
-    border-color: #9AC8CD;
-    background-color: #E1F7F5;
-    box-shadow: 1px 1px 1px 1px #1679AB;
+    border-radius: 16px;
+    border-color: #ec8482cb;
+    backdrop-filter: blur(5.5px);
+    -webkit-backdrop-filter: blur(5.5px);
+    background: #FA7070;
+    box-shadow: 0 4px 30px #9b3f3e;
 }
 #display {
     height: 20%;
-    width: auto;
-}
-
-.previous-number, .current-number {
-    height: 50%;
-    width: auto;
+    width: 97%;
+    margin: 1% auto 1% auto;
     box-sizing: border-box;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.828);
     text-align: right;
-    padding-right: 4%;
-    padding-top: 2%;
-    font-weight: bold;
     color: white;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-.current-number {
-    font-size: xx-large
+    padding-right: 4%;
+    padding-top: 7%;
+    font-weight: bold;
+    font-size: 2.5rem;
+    border-radius: 16px;
+    background: #fefdedbf;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 .row {
     display: flex;
@@ -48,27 +52,37 @@ h1 {
     justify-content: space-between;
 }
 button {
-    height: 98%;
-    width: 24%;
-    border-radius: 5%;
-    margin: 1px;
+    height: 85%;
+    width: 19%;
+    border-radius: 16px;
+    border-color: salmon;
+    box-shadow: 0 4px 6px rgba(35, 35, 35, 0.629);
+    margin: 1% auto;
     font-weight: bold;
     color: white;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    font-size: x-large;
+    font-size: 2rem;
 }
 button:hover {
-    opacity: 0.7;    
+    background: rgba(255, 0, 153, 0.859);
+    opacity: 0.9;    
 }
 #zero {
-    width: 49.2%;
+    width: 44%;
 }
 .special-button {
-    background-color: #4793AF;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background: #0b4e7adb;
 }
 .operator {
-    background-color: #DD5746;
+    font-size: 3rem;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background: #FFE4C9;
 }
 .number {
-    background-color: #FFC470;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background: #fefdedbe;
 }
