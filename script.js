@@ -41,6 +41,7 @@ function handleSymbol(symbol){
                 buffer = '0';
             }else {
                 buffer = buffer.slice(0, (buffer.length - 1));
+                display.textContent = buffer;
             }
             break;
         case '%':
