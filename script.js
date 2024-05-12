@@ -12,20 +12,22 @@ buttons.forEach((button) =>{
 })
 
 /*
- * Selecting all buttons and assigning to each button a function (buttonClick).
-This function has the goal to verify what kind of button is clicked and
-proceed appropriately.
+ *  Selecting all buttons and assigning to each button a function (buttonClick).
+    This function has the goal to verify what kind of button is clicked and
+    process it appropriately.
  * 
  */ 
 
 function buttonClick(value){
     if (isNaN(value)){
         handleSymbol(value);
+        
     }else {
         handleNumber(value);
+        display.textContent = buffer;
     }
-    display.textContent = buffer;
 }
+
 function handleSymbol(symbol){
     switch(symbol){
         case 'AC':
@@ -68,25 +70,26 @@ function handleSymbol(symbol){
                 operator = null;
                 runningResult = 0;
             }
-            
             break;
     }
 }
+
 function handleMath(symbol){
     // simple scenarios, the conditions may vary later to prevent some bugs
     if(operator === null){
         runningResult = parseFloat(buffer);
-    }else{ //NEED TO WORK ON THIS STATEMENT
-    // this case occurs when runningResult, buffer and a symbol are assigned
-        
+    }else{
+    // this case occurs when runningResult & operator have values and buffer is in input
         const floatBuffer = parseFloat(buffer);
-        computeOperation(floatBuffer);    
+        computeOperation(floatBuffer);
+        display.textContent = runningResult;    
     }
     operator = symbol;
     buffer = '0';
 }
+
 function computeOperation(numb){
-// this function is called when i have all the ingredients to make a computation
+// this function is called when all operands are ready to perform a computation
     switch(operator){
         case '+':
             runningResult += numb;
@@ -102,6 +105,7 @@ function computeOperation(numb){
             break;
     }
 }
+
 function handleNumber(numberString){
     if(buffer.length < 10){
         if(buffer === '0'){
