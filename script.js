@@ -34,6 +34,7 @@ function handleSymbol(symbol){
             buffer = '0';
             runningResult = 0;
             operator = null;
+            display.textContent = buffer;
             break;
         case 'C':
             if(buffer.length === 1){
@@ -43,10 +44,11 @@ function handleSymbol(symbol){
             }
             break;
         case '%':
-            // need to think about this one
+            // TODO: need to think about this one
             break;
         case '.':
             // need to think about this one
+            // TODO: use handleNumber logic and add if condition there
             break;
         case '÷':
             handleMath(symbol);
@@ -104,6 +106,8 @@ function computeOperation(numb){
             runningResult /= numb;
             break;
     }
+    //TODO: ADD METHOD TO ROUND THE RESULT DOWN BELOW
+
 }
 
 function handleNumber(numberString){
