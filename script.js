@@ -17,21 +17,21 @@ const percentageButton = document.querySelector(".percentage-button");
  * 
  * These properties are added according to the following logic:
  *
- * CASE 1 -> When inserting numbers, if !opSign in calculator, then create num1 with the pressed number as first value and add the subsequent numbers to num1.
+ * CASE 1 -> When inserting numbers, if !opSign in calculator, then create num1 with the pressed number as first value and concatenate the subsequent numbers to num1.
  * in this case when adding numbers it is necessary to check if the length of the number is within the chosen limit (8 digits in my case)
  * 
  * CASE 2 -> When inserting numbers, if opSign in calculator (meaning that num1 is created and stored in calculator), then create num2 with the same logic
  * as num1. 
  * 
- * CASE 3 -> When started, there will be no operator assigned, therefore when the operator buttons is clicked the opSign will be created in calculator
+ * CASE 3 -> When the program is started, there will be no operator assigned, therefore when the operator buttons is clicked the opSign will be created in calculator
  * with the corresponding operator (this is done in the buildCalculator function). This case will trigger case 2 if number buttons are pressed,
  * building the calculator object.
  * 
- * CASE 4 -> When opSign is already assigned and an operator button is pressed, this means that (ideally) num1 and num2 are present in calculator,
+ * CASE 4 -> When opSign is already assigned and a (further) operator button is pressed, this means that (ideally) num1 and num2 are present in calculator,
  * therefore it must calculate(num1, num2, opSign) accordingly -> once the calculation is done, the result is assigned to calculator.result, and num1 and num2
- * will be delated to trigger CASE 2.
+ * will be delated and the recent opSign is updated to trigger CASE 5.
  * 
- * CASE 5 (VARIATION of CASE 4) -> It may happen that if we repeat CASE 4, but opSign, calculator.result (instead of num1) and num2 are present in calculator,
+ * CASE 5 (VARIATION of CASE 4) -> It may happen that if we repeat CASE 4, but with opSign, calculator.result (instead of num1) and num2 being present in calculator,
  * then it must calculate(calculator.result, num2, opSign) -> once the calculation is done, the result is updated, num1 and num2 are deleted,
  * and opSign will be updated with the last pressed button that triggered the calculation.
  * 
@@ -74,10 +74,10 @@ function displayNumber(num) {
     if (('opSign' in calculator) && !('num2' in calculator)) {
         calculator.num2 = num;
         if ('result' in calculator) {
-            displayPreviousNumber.textContent = calculator.result + calculator.opSign;
+            displayPreviousNumber.textContent = calculator.result;
             displayCurrentNumber.textContent = calculator.num2;
         } else {
-            displayPreviousNumber.textContent = calculator.num1 + calculator.opSign;
+            displayPreviousNumber.textContent = calculator.num1;
             displayCurrentNumber.textContent = calculator.num2;
         }
         
@@ -92,18 +92,21 @@ function displayNumber(num) {
 
 }
 function buildCalculator(sign) {
-
+// CASE 5 (Variation of CASE 4): result, opSign and num2 are already present in calculator and an operator is pressed
     if (('result' in calculator) && ('opSign' in calculator) && ('num2' in calculator)) {
         displayPreviousNumber.textContent = calculator.num2;
         calculate(calculator.result, calculator.num2, calculator.opSign);
         displayCurrentNumber.textContent = calculator.result;
+        // Update the sign;
         calculator.opSign = sign;
-    } else if (('num1' in calculator) && ('opSign' in calculator) && ('num2' in calculator)) {
+    } // CASE 4
+    else if (('num1' in calculator) && ('opSign' in calculator) && ('num2' in calculator)) {
         displayPreviousNumber.textContent = calculator.num2;
         calculate(calculator.num1, calculator.num2, calculator.opSign);
         displayCurrentNumber.textContent = calculator.result;
+        // Update the sign;
         calculator.opSign = sign;
-    } else {
+    } else { // THIS is CASE 3 -> no opSign in calculator, therefore i need to create it with the pressed operator and trigger CASE 4
         calculator.opSign = sign;
     }  
     console.log(calculator.result);
