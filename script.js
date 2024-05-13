@@ -101,8 +101,10 @@ function handleSymbol(symbol){
 function handleMath(symbol){
     if(operator === null){
         runningResult = parseFloat(buffer);
+    }else if(operator === '÷' && buffer === '0'){
+        warningDivision();
+        return;
     }else{
-    // this case occurs when runningResult & operator have values and buffer is in input
         const floatBuffer = parseFloat(buffer);
         computeOperation(floatBuffer);
         roundResult();
@@ -113,7 +115,6 @@ function handleMath(symbol){
 }
 
 function computeOperation(numb){
-// this function is called when all operands are ready to perform a computation
     switch(operator){
         case '+':
             runningResult += numb;
@@ -125,10 +126,6 @@ function computeOperation(numb){
             runningResult *= numb;
             break;
         case '÷':
-            if (numb === 0) {
-                warningDivision();
-                return;
-            }
             runningResult /= numb;
             break;
     }
@@ -145,7 +142,7 @@ function handleNumber(numberString){
 }
 
 function warningDivision(){
-    display.textContent = "Error: Division by zero";
+    display.textContent = "Dividing by 0, use another number";
 }
 
 function roundResult(){
