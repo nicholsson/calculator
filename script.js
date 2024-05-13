@@ -19,12 +19,18 @@ buttons.forEach((button) =>{
  */ 
 
 function buttonClick(value){
+    
     if (isNaN(value)){
         handleSymbol(value);
         
     }else {
-        handleNumber(value);
-        display.textContent = buffer;
+        if(value === '0' && buffer === '0'){
+            display.textContent = buffer;
+            return;
+        }else{
+            handleNumber(value);
+            display.textContent = buffer;
+        }
     }
 }
 
@@ -44,12 +50,22 @@ function handleSymbol(symbol){
                 display.textContent = buffer;
             }
             break;
-        case '%':
-            // TODO: need to think about this one
+        case '±':
+            let floatBuffer = parseFloat(buffer);
+            floatBuffer = -floatBuffer;
+            buffer = String(floatBuffer);
+            display.textContent = buffer;
             break;
         case '.':
-            // need to think about this one
-            // TODO: use handleNumber logic and add if condition there
+            if(buffer === '0'){
+                buffer += symbol;
+            }else{
+                if(buffer.includes(symbol)){
+                    return;
+                }
+                buffer += symbol;
+            }
+            display.textContent = buffer;
             break;
         case '÷':
             handleMath(symbol);
@@ -64,10 +80,15 @@ function handleSymbol(symbol){
             handleMath(symbol);
             break;
         case '=':
+            if(operator === '÷' && buffer === '0'){
+                warningDivision();
+                return;
+            }
             if(operator === null){
                 return
             } else {
                 computeOperation(parseFloat(buffer));
+                roundResult();
                 buffer = runningResult.toString();
                 display.textContent = buffer;
                 operator = null;
@@ -78,13 +99,13 @@ function handleSymbol(symbol){
 }
 
 function handleMath(symbol){
-    // simple scenarios, the conditions may vary later to prevent some bugs
     if(operator === null){
         runningResult = parseFloat(buffer);
     }else{
     // this case occurs when runningResult & operator have values and buffer is in input
         const floatBuffer = parseFloat(buffer);
         computeOperation(floatBuffer);
+        roundResult();
         display.textContent = runningResult;    
     }
     operator = symbol;
@@ -104,11 +125,13 @@ function computeOperation(numb){
             runningResult *= numb;
             break;
         case '÷':
+            if (numb === 0) {
+                warningDivision();
+                return;
+            }
             runningResult /= numb;
             break;
     }
-    //TODO: ADD METHOD TO ROUND THE RESULT DOWN BELOW
-
 }
 
 function handleNumber(numberString){
@@ -119,4 +142,12 @@ function handleNumber(numberString){
             buffer += numberString;
         }
     }
+}
+
+function warningDivision(){
+    display.textContent = "Error: Division by zero";
+}
+
+function roundResult(){
+    runningResult = Math.round(runningResult * 1000) / 1000;
 }
